@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>hello, world</title>
+</head>
+<body>
+<h1>Hello, web !!!</h1>
+<br/>
+<br/>
+<a href="./villes">lister les villes</a>
+<br/>
+<br/>
+<br/>
+<br/>
+<form action="./villes" method="post">
+    <div>
+        <label for="name">Nom de la ville :</label>
+        <input type="text" id="name" name="name" required/>
+    </div>
+    <div>
+    <label for="longitude">Longitude :</label>
+    <input id="longitude" type="float" name="longitude" size="10" required/>
+    </div>
+    <div>
+    <label for="latitude">Latitude :</label>
+    <input id="latitude" type="float" name="latitude" size="10" required/>
+    </div>
+    <div class="button">
+        <button type="submit">Ajouter une ville</button>
+    </div>
+</form>
+<script>
+function doPost(){
+    var city_name = document.getElementById("name").value
+    var city_longitude = document.getElementById("longitude").value
+    var city_latitude = document.getElementById("latitude").value
+
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", "/villes/");
+
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.send(JSON.stringify({name:city_name, longitude: city_longitude, latitude: city_latitude}));
+    }
+</script>
+<input id="clickMe" type="button" value="Ajouter une ville avec javascript" onclick="doPost();" />
+<br/>
+<br/>
+<br/>
+<br/>
+
+<div>
+    Identifiant de la ville à supprimer : <input id="id" type="int" name="id" size="10" required/>
+</div>
+<script>
+function doDelete(){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("DELETE", "/villes/"+document.getElementById("id").value);
+    xmlhttp.send();
+    }
+</script>
+<input id="clickDelete" type="button" value="Supprimer avec javascript" onclick="doDelete();" />
+<br/>
+<br/>
+<br/>
+<br/>
+<label for="measures-type-select">Type de mesure:</label>
+
+<select name="measure-types" id="measures-type-select">
+    <option value="">--Choisir le type de mesure--</option>
+    <option value="CO2">Dioxyde de carbone</option>
+    <option value="HUMIDITY">Humidité</option>
+    <option value="PRESSURE">Pression</option>
+    <option value="TEMPERATURE">Température</option>
+    <option value="VOC">Composés organiques volatils</option>
+</select>
+<br/>
+<label for="begin-time">Heure de début:</label>
+<input type="datetime-local" id="begin-time"
+       name="begin-time" value="2018-06-12T19:30"
+       min="2018-06-07T00:00" max="2018-06-14T00:00">
+<br/>
+<label for="end-time">Heure de fin:</label>
+<input type="datetime-local" id="end-time"
+       name="end-time" value="2018-06-12T19:30"
+       min="2018-06-07T00:00" max="2018-06-14T00:00">
+<br/>
+<script>
+function doGetMeasure(){
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", "/villes/sub?"+"measure-type="+document.getElementById("measures-type-select").value
+    +"&start-date="+document.getElementById("begin-time").value
+    +"&end-date="+document.getElementById("end-time").value);
+    xmlhttp.send();
+    }
+</script>
+<input id="getMeasure" type="button" value="récupérer une mesure" onclick="doGetMeasure();" />
+</body>
+</html>
