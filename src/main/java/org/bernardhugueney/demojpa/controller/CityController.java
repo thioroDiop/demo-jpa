@@ -53,6 +53,9 @@ public class CityController {
         City res=cityRepository.save(resource);
         res.setName(res.getName()+" modified after save !");
         System.err.println("managed ?:"+entityManager.contains(res));
+        if(res.getName().contains("rollback")){
+            throw new IllegalArgumentException("triggering rollback");
+        }
         return res.getId();
     }
 

@@ -1,6 +1,10 @@
 package org.bernardhugueney.demojpa.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 @Entity
 @Table(name = "\"City\"", schema = "public")
@@ -14,6 +18,10 @@ public class City {
     String name;
     double longitude;
     double latitude;
+
+    @OneToMany(mappedBy = "city")
+    @JsonManagedReference
+    private List<Monument> monuments = new ArrayList<Monument>();
 
     public City(){id=null; name=null;}
 

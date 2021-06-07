@@ -88,7 +88,7 @@ function doDelete(){
 <script>
 function doGetMeasure(){
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", "/villes/sub?"+"measure-type="+document.getElementById("measures-type-select").value
+    xmlhttp.open("GET", "/api/measures?"+"measure-type="+document.getElementById("measures-type-select").value
     +"&start-date="+document.getElementById("begin-time").value
     +"&end-date="+document.getElementById("end-time").value);
     xmlhttp.send();
