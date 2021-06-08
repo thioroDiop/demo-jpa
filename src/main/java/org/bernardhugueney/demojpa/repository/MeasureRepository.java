@@ -2,6 +2,7 @@ package org.bernardhugueney.demojpa.repository;
 
 import org.bernardhugueney.demojpa.model.Measure;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -30,4 +31,11 @@ public interface MeasureRepository extends JpaRepository<Measure, Long> {
                          @Param("endDate") LocalDateTime endDate);
 
     List<Measure> findByTypeAndMeasureDateBetween(String measureType, LocalDateTime startDate, LocalDateTime endDate);
+
+    // Must be called in a transaction (e.g. in a method annotated with @Transactional
+    @Modifying
+    @Query("update Measure m set m.value = :value where m.id = :id")
+    void setValueById(@Param("value") double value, @Param("id") Long id);
+
+
 }

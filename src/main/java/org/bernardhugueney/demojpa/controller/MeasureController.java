@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +47,11 @@ public class MeasureController {
         System.err.println("myRes.size()="+myRes.size());
         return measureRepository.myFind(measureType, startDate, endDate);
     }
-
+/*
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.open("DELETE", "/api/measures/3000");
+xmlhttp.send();
+ */
     @RequestMapping(value = "/{identifiant}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("identifiant") Long id){
@@ -58,7 +63,50 @@ public class MeasureController {
         return measureRepository.findById(id);
     }
 
+    /*
+    var xmlhttp = new XMLHttpRequest();
+xmlhttp.open("PUT", "/api/measures/3000");
+xmlhttp.setRequestHeader("Content-Type", "application/json");
+xmlhttp.send(JSON.stringify({id : 3000, type: "temp", unit:"c", value : 55.55, measureDate: "2021-06-08T10:28:13.59"}));
 
+     */
+    @RequestMapping(value = "/{identifiant}", method = RequestMethod.PUT)
+    public ResponseEntity<Measure> update(@PathVariable("identifiant") Long id,
+                                    @RequestBody Measure measure){
+        if(!measure.getId().equals(id)){
+            return new ResponseEntity<>(measure
+                    ,HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(measureRepository.save(measure)
+                ,HttpStatus.OK);
+    }
+    /*
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("PUT", "/api/measures/3000/value");
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xmlhttp.send(JSON.stringify(555.555));
+
+         */
+    @Transactional
+    @RequestMapping(value = "/{identifiant}/value", method = RequestMethod.PUT)
+    public ResponseEntity<Double> updateValue(@PathVariable("identifiant") Long id,
+                                          @RequestBody double value){
+        HttpStatus res= HttpStatus.OK;
+        try{
+            measureRepository.setValueById(value, id);
+        }catch (Exception e){
+            res= HttpStatus.NOT_FOUND;
+        }
+        return new ResponseEntity<>(value, res);
+    }
+
+    /*
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.open("POST", "/api/measures/");
+xmlhttp.setRequestHeader("Content-Type", "application/json");
+xmlhttp.send(JSON.stringify({ type: "testingPOST", unit:"c", value : 55.55, measureDate: "2021-06-08T10:28:13.59"}));
+
+     */
     @RequestMapping(method = RequestMethod.POST)
     public Measure storeMeasure(@RequestBody Measure measure) {
         return measureRepository.save(measure);
