@@ -89,15 +89,10 @@ xmlhttp.send(JSON.stringify({id : 3000, type: "temp", unit:"c", value : 55.55, m
          */
     @Transactional
     @RequestMapping(value = "/{identifiant}/value", method = RequestMethod.PUT)
-    public ResponseEntity<Double> updateValue(@PathVariable("identifiant") Long id,
+    public ResponseEntity updateValue(@PathVariable("identifiant") Long id,
                                           @RequestBody double value){
-        HttpStatus res= HttpStatus.OK;
-        try{
-            measureRepository.setValueById(value, id);
-        }catch (Exception e){
-            res= HttpStatus.NOT_FOUND;
-        }
-        return new ResponseEntity<>(value, res);
+        return new ResponseEntity(measureRepository.setValueById(value, id)
+        ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 
     /*

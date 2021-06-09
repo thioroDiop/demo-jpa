@@ -32,10 +32,12 @@ public interface MeasureRepository extends JpaRepository<Measure, Long> {
 
     List<Measure> findByTypeAndMeasureDateBetween(String measureType, LocalDateTime startDate, LocalDateTime endDate);
 
-    // Must be called in a transaction (e.g. in a method annotated with @Transactional
+    // Must be called in a non read-only transaction
+    // (e.g. in a method annotated with @Transactional as readOnly= false is the default)
+    // that overrides the default @Transactional(readOnly = true) of the .
     @Modifying
     @Query("update Measure m set m.value = :value where m.id = :id")
-    void setValueById(@Param("value") double value, @Param("id") Long id);
+    boolean setValueById(@Param("value") double value, @Param("id") Long id);
 
 
 }
