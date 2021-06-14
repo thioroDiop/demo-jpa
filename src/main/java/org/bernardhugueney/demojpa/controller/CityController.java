@@ -1,8 +1,13 @@
 package org.bernardhugueney.demojpa.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import org.bernardhugueney.demojpa.model.City;
 import org.bernardhugueney.demojpa.repository.CityRepository;
+import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +30,9 @@ public class CityController {
     private CityRepository cityRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<City> findAll(){
-        return cityRepository.findAll();
+    @PageableAsQueryParam
+    public Page<City> findAll(@PageableDefault(size=8) @Parameter(hidden=true) Pageable pageable){
+        return cityRepository.findAll(pageable);
     }
     // requête localhost:8090/villes/sub?measure-type=MaMesure
     @RequestMapping(value = "/sub"
