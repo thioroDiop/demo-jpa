@@ -91,7 +91,7 @@ xmlhttp.send(JSON.stringify({id : 3000, type: "temp", unit:"c", value : 55.55, m
     @RequestMapping(value = "/{identifiant}/value", method = RequestMethod.PUT)
     public ResponseEntity updateValue(@PathVariable("identifiant") Long id,
                                           @RequestBody double value){
-        return new ResponseEntity(measureRepository.setValueById(value, id)
+        return new ResponseEntity((measureRepository.setValueById(value, id)!=0)
         ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 

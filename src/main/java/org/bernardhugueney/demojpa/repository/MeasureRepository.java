@@ -34,10 +34,17 @@ public interface MeasureRepository extends JpaRepository<Measure, Long> {
 
     // Must be called in a non read-only transaction
     // (e.g. in a method annotated with @Transactional as readOnly= false is the default)
-    // that overrides the default @Transactional(readOnly = true) of the .
+    // that overrides the default @Transactional(readOnly = true) of the repository.
+    // returns the number of updated rows
+/*
     @Modifying
     @Query("update Measure m set m.value = :value where m.id = :id")
-    boolean setValueById(@Param("value") double value, @Param("id") Long id);
+    int setValueById(@Param("value") double value, @Param("id") Long id);
+*/
+    @Modifying
+    @Query(value = "UPDATE Measure SET value = :value WHERE id = :id", nativeQuery = true)
+    int setValueById(@Param("value") double value, @Param("id") Long id);
+
 
 
 }
