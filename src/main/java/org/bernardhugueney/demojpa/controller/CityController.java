@@ -3,7 +3,6 @@ package org.bernardhugueney.demojpa.controller;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.bernardhugueney.demojpa.model.City;
 import org.bernardhugueney.demojpa.repository.CityRepository;
-import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +31,6 @@ public class CityController {
     private CityRepository cityRepository;
 
     @RequestMapping(method = RequestMethod.GET)
-    @PageableAsQueryParam
     public Page<City> findAll(@Parameter(hidden = true)
                               @PageableDefault(page = 0, size = 20,
                                       sort = "id", direction = Sort.Direction.DESC)
